@@ -3,3 +3,8 @@ node_modules
 build
 
 .env
+.env.test
+
+*.db
+
+.vscode
