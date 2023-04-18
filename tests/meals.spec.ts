@@ -21,7 +21,7 @@ describe('(e2e) /meals', () => {
   describe('POST /', () => {
     test('should be able to create a meal', async () => {
       await supertest(app.server)
-        .post('/')
+        .post('/meals')
         .send({
           name: 'hamburger',
           description: 'foo',

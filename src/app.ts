@@ -7,7 +7,9 @@ import { ZodError } from 'zod'
 
 export const app = fastify()
 
-app.register(mealsRoutes)
+app.register(mealsRoutes, {
+  prefix: 'meals',
+})
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
