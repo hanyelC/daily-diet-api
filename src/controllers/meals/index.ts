@@ -1,1 +1,1 @@
-export * from './createMeal'
+export * from './create-meal'
