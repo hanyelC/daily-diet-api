@@ -115,8 +115,55 @@ describe('(e2e) /meals', () => {
   })
 
   describe('PUT /:id', () => {
-    test.todo('should be able to update meal', async () => {
-      await supertest(app.server).put('/meals/some-id').expect(200)
+    test('should not be able to update non existing meal', async () => {
+      await supertest(app.server)
+        .put('/meals/non-existing-id')
+        .send({
+          name: 'string',
+        })
+        .expect(404)
+    })
+
+    test('should be able to update meal', async () => {
+      const [meal] = await knex('meals')
+        .insert({
+          id: 'some-id',
+          date: new Date('2023-03-03').toISOString(),
+          description: 'foo',
+          name: 'foo',
+          within_diet: true,
+        })
+        .returning('*')
+
+      const newData = {
+        name: 'banana',
+        description: 'baz',
+        date: new Date('2023-02-02').toISOString(),
+        withinDiet: false,
+      }
+
+      await supertest(app.server)
+        .put(`/meals/${meal.id}`)
+        .send(newData)
+        .expect(204)
+
+      const updatedMealOnDB = await knex('meals')
+        .where({ id: meal.id })
+        .select(
+          'id',
+          'date',
+          'description',
+          'name',
+          'within_diet as withinDiet',
+        )
+        .first()
+
+      expect(updatedMealOnDB).toEqual(
+        expect.objectContaining({
+          ...newData,
+          withinDiet: 0,
+        }),
+      )
     })
   })
 })
