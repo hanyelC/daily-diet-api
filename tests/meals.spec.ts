@@ -1,8 +1,10 @@
 import { app } from '@/app'
+import { knex } from '@/database'
 
 import { execSync } from 'node:child_process'
+import { randomUUID } from 'node:crypto'
 import supertest from 'supertest'
-import { afterAll, beforeAll, beforeEach, describe, test, expect } from 'vitest'
+import { afterAll, beforeAll, beforeEach, describe, expect, test } from 'vitest'
 
 describe('(e2e) /meals', () => {
   beforeAll(async () => {
@@ -70,19 +72,33 @@ describe('(e2e) /meals', () => {
   })
 
   describe('GET /:id', () => {
-    test.skip('should be able to get meal', async () => {
-      await supertest(app.server).get('/meals/some-id').expect(200)
+    test('should be able to get meal', async () => {
+      const [createdMeal] = await knex('meals')
+        .insert({
+          id: randomUUID(),
+          date: new Date('2023-03-03').toISOString(),
+          description: 'foo',
+          name: 'foo',
+          within_diet: true,
+        })
+        .returning('*')
+
+      const { body } = await supertest(app.server).get(
+        `/meals/${createdMeal.id}`,
+      )
+
+      expect(body.meal.id).toEqual(createdMeal.id)
     })
   })
 
   describe('DELETE /:id', () => {
-    test.skip('should be able to delete meal', async () => {
+    test.todo('should be able to delete meal', async () => {
       await supertest(app.server).delete('/meals/some-id').expect(200)
     })
   })
 
   describe('PUT /:id', () => {
-    test.skip('should be able to update meal', async () => {
+    test.todo('should be able to update meal', async () => {
       await supertest(app.server).put('/meals/some-id').expect(200)
     })
   })
