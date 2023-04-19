@@ -1,5 +1,6 @@
 import {
   createMealController,
+  deleteMealController,
   getMealByIdController,
   listMealsController,
 } from '@/controllers'
@@ -11,4 +12,6 @@ export async function mealsRoutes(app: FastifyInstance) {
   app.get('/:id', getMealByIdController)
 
   app.post('/', createMealController)
+
+  app.delete('/:id', deleteMealController)
 }

@@ -92,8 +92,25 @@ describe('(e2e) /meals', () => {
   })
 
   describe('DELETE /:id', () => {
-    test.todo('should be able to delete meal', async () => {
-      await supertest(app.server).delete('/meals/some-id').expect(200)
+    test('should be able to delete meal', async () => {
+      const [createdMeal] = await knex('meals')
+        .insert({
+          id: randomUUID(),
+          date: new Date('2023-03-03').toISOString(),
+          description: 'foo',
+          name: 'foo',
+          within_diet: true,
+        })
+        .returning('*')
+
+      await supertest(app.server).delete(`/meals/${createdMeal.id}`).expect(204)
+
+      const meal = await knex('meals')
+        .where({ id: createdMeal.id })
+        .select()
+        .first()
+
+      expect(meal).toEqual(undefined)
     })
   })
 
