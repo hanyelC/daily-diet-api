@@ -1,4 +1,5 @@
 import { env } from '@/env'
+import { AppError } from '@/errors'
 import { mealsRoutes } from '@/routes'
 
 import fastify from 'fastify'
@@ -12,6 +13,13 @@ app.register(mealsRoutes, {
 })
 
 app.setErrorHandler((error, _, reply) => {
+  if (error instanceof AppError) {
+    return reply.status(error.statusCode).send({
+      error: error.name,
+      message: error.message,
+    })
+  }
+
   if (error instanceof ZodError) {
     return reply
       .status(StatusCodes.BAD_REQUEST)
