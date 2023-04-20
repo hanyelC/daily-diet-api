@@ -1,12 +1,16 @@
 import { env } from '@/env'
 import { AppError } from '@/errors'
-import { mealsRoutes } from '@/routes'
+import { authRoutes, mealsRoutes } from '@/routes'
 
 import fastify from 'fastify'
 import { StatusCodes } from 'http-status-codes'
 import { ZodError } from 'zod'
 
 export const app = fastify()
+
+app.register(authRoutes, {
+  prefix: 'auth',
+})
 
 app.register(mealsRoutes, {
   prefix: 'meals',
