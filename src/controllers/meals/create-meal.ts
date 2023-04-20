@@ -1,8 +1,8 @@
 import { knex } from '@/database'
 
 import { FastifyReply, FastifyRequest } from 'fastify'
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { randomUUID } from 'node:crypto'
-import { StatusCodes, ReasonPhrases } from 'http-status-codes'
 import { z } from 'zod'
 
 const createMealBodySchema = z.object({
