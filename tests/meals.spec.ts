@@ -20,7 +20,7 @@ describe('(e2e) /meals', () => {
     execSync('npm run knex migrate:latest')
   })
 
-  describe('POST /', () => {
+  describe('POST /meals', () => {
     test('should be able to create a meal', async () => {
       await supertest(app.server)
         .post('/meals')
@@ -34,7 +34,7 @@ describe('(e2e) /meals', () => {
     })
   })
 
-  describe('GET /', () => {
+  describe('GET /meals', () => {
     test('should be able to list meals', async () => {
       const fakeMealData = {
         name: 'hamburger',
@@ -71,7 +71,7 @@ describe('(e2e) /meals', () => {
     })
   })
 
-  describe('GET /:id', () => {
+  describe('GET /meals/:id', () => {
     test('should be able to get meal', async () => {
       const [createdMeal] = await knex('meals')
         .insert({
@@ -91,7 +91,7 @@ describe('(e2e) /meals', () => {
     })
   })
 
-  describe('DELETE /:id', () => {
+  describe('DELETE /meals/:id', () => {
     test('should be able to delete meal', async () => {
       const [createdMeal] = await knex('meals')
         .insert({
@@ -114,7 +114,7 @@ describe('(e2e) /meals', () => {
     })
   })
 
-  describe('PUT /:id', () => {
+  describe('PUT /meals/:id', () => {
     test('should not be able to update non existing meal', async () => {
       await supertest(app.server)
         .put('/meals/non-existing-id')
